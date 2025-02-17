@@ -15,11 +15,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    isAdmin: {
-        type: Boolean,
-        required: true,
-        default: false,
-    },
     image: {
         type: String,
         default: ""
@@ -30,4 +25,4 @@ const userSchema = new mongoose.Schema({
     }],
 })
 
-const User = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
