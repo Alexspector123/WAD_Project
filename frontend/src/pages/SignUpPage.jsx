@@ -1,43 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../store/authUser';
 
 const SignUpPage = () => {
-  const [email, setEmail] = React.useState('');
+  const { searchParams } = new URL(document.location);
+  const emailValue = searchParams.get("email");
+
+  const [email, setEmail] = React.useState(emailValue || "");
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
 
+  const { signup } = useAuthStore();
+
   const handleSignUp = (e) => {
     e.preventDefault();
-    console.log(email, username, password);
-    setEmail('');
-    setUsername('');
-    setPassword('');
+    signup({ email, username, password});
   };
 
   return (
     <div className="h-screen w-full hero-bg">
-      <header className="max-w-6xl mx-auto flex items-center justify-between p-4">
+      <header className="max-w-[6xl] mx-auto flex items-center justify-between p-[10px]">
         <Link to="/">
-          <img src="/netflix-logo.png" alt="logo" className="w-28" />
+          <img src="/netflix-logo.png" alt="logo" className="w-[100px]" />
         </Link>
       </header>
 
-      <div className="flex justify-center items-center mt-20 mx-3">
+      <div className="flex justify-center items-center mt-[20px] mx-[3px]">
         {/* Changed bg-black-60 -> bg-black/60 */}
-        <div className="w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md">
-          <h1 className="text-center text-white text-2xl font-bold mb-4">Sign Up</h1>
+        <div className="w-full max-w-auto p-[8px] space-y-[6px] bg-[#00000094] rounded-bl-full shadow-current">
+          <h1 className="text-center text-[white] text-[2x1] font-stretch-50% mb-[4px]">Sign Up</h1>
 
-          <form className="space-y-6" onSubmit={handleSignUp}>
+          <form className="space-y-[6px]" onSubmit={handleSignUp}>
             <div>
-              <label htmlFor="email" className="text-sm font-medium text-gray-300 block">
+              <label htmlFor="email" className="text-start font-stretch-normal text-[white] block">
                 Email
               </label>
               <input
                 type="email"
                 id="email"
-                className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md 
-                           bg-transparent text-white placeholder-gray-400
-                           focus:outline-none focus:ring-2 focus:ring-red-600 
+                className="w-full px-[3px] py-[2px] mt-[1px] border border-[gray]/700 rounded-full
+                           bg-transparent text-[white] placeholder-[gray]/400
+                           focus:outline-none focus:ring-2 focus:ring-[red]/600 
                            transition duration-200"
                 placeholder="Enter email"
                 value={email}
@@ -46,15 +49,15 @@ const SignUpPage = () => {
             </div>
 
             <div>
-              <label htmlFor="username" className="text-sm font-medium text-gray-300 block">
+              <label htmlFor="username" className="text-start font-stretch-normal text-[white] block">
                 User Name
               </label>
               <input
                 type="text"
                 id="username"
-                className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md 
-                           bg-transparent text-white placeholder-gray-400
-                           focus:outline-none focus:ring-2 focus:ring-red-600 
+                className="w-full px-[3px] py-[2px] mt-[1px] border border-[gray]/700 rounded-full
+                           bg-transparent text-[white] placeholder-[gray]/400
+                           focus:outline-none focus:ring-2 focus:ring-[red]/600 
                            transition duration-200"
                 placeholder="Enter user name"
                 value={username}
@@ -63,15 +66,15 @@ const SignUpPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="text-sm font-medium text-gray-300 block">
+              <label htmlFor="password" className="text-start font-stretch-normal text-[white] block">
                 Password
               </label>
               <input
                 type="password"
                 id="password"
-                className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md 
-                           bg-transparent text-white placeholder-gray-400
-                           focus:outline-none focus:ring-2 focus:ring-red-600 
+                className="w-full px-[3px] py-[2px] mt-[1px] border border-[gray]/700 rounded-full
+                           bg-transparent text-[white] placeholder-[gray]/400
+                           focus:outline-none focus:ring-2 focus:ring-[red]/600 
                            transition duration-200"
                 placeholder="Enter password"
                 value={password}
@@ -80,17 +83,17 @@ const SignUpPage = () => {
             </div>
 
             <button
-              className="w-full py-2 bg-red-600 text-white font-semibold 
-                         rounded-md hover:bg-red-700 
+              className="w-full py-[2px] bg-[red] text-[white] font-stretch-semi-expanded
+                         rounded-full hover:bg-[red]/700 
                          transition duration-200"
             >
               Sign Up
             </button>
           </form>
 
-          <div className="text-center text-gray-400">
+          <div className="text-center text-[white]/60">
             Already have an account?{' '}
-            <Link to="/login" className="text-red-600 hover:underline">
+            <Link to="/login" className="text-[red]/60 hover:underline">
               Log In
             </Link>
           </div>
