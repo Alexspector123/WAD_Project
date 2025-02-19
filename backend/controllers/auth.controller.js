@@ -39,11 +39,15 @@ export async function signup(req, res) {
             username
         });
         generateTokenAndSetCookie(newUser._id, res);
-        await newUser.save(); 
-        res.status(201).json({success: true, message: 'User created successfully'});
+        const savedUser = await User.findById(newUser._id).select("-password");
 
+        return res.status(201).json({
+          success: true,
+          message: "User created successfully",
+          user: savedUser,
+        });
     } catch (error) {
-        res.status(500).json({success: false, message: error.message});
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 
@@ -79,17 +83,27 @@ export async function login(req, res) {
         }
 
         generateTokenAndSetCookie(user._id, res);
-        res.status(200).json({success: true, message: 'Logged in successfully'});
+        // re-fetch or use .select() to omit password
+        const loggedInUser = await User.findById(user._id).select("-password");
+
+        return res.status(200).json({
+        success: true,
+        message: "Logged in successfully",
+        user: loggedInUser,
+        });
     } catch (error) {
-        res.status(500).json({success: false, message: error.message});
-    }
+    res.status(500).json({ success: false, message: error.message });
+  }
 }
 
 export async function authCheck(req, res) {
     try {
-        res.status(200).json({success: true, user: req.user});
+      const userFromDb = await User.findById(req.user._id).select("-password");
+      res.status(200).json({ success: true, user: userFromDb });
     } catch (error) {
-        console.log("Error is authCheck function in controller", error.message);
-        res.status(500).json({success: false, message: "Internal server error"});
+      console.log("Error is authCheck function in controller", error.message);
+      res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
+  
+  

@@ -1,20 +1,31 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authUser';
 
 const SignUpPage = () => {
+  // read initial email from URL
   const { searchParams } = new URL(document.location);
   const emailValue = searchParams.get("email");
 
-  const [email, setEmail] = React.useState(emailValue || "");
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState(emailValue || "");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const { signup } = useAuthStore();
+  // Grab `user` & `signup` from our store
+  const { user, signup } = useAuthStore();
+  const navigate = useNavigate();
 
-  const handleSignUp = (e) => {
+  // Navigate once user is set (means signup successful)
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  // await signup so the `user` state updates properly
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    signup({ email, username, password});
+    await signup({ email, username, password });
   };
 
   return (
@@ -26,13 +37,17 @@ const SignUpPage = () => {
       </header>
 
       <div className="flex justify-center items-center mt-[20px] mx-[3px]">
-        {/* Changed bg-black-60 -> bg-black/60 */}
         <div className="w-full max-w-auto p-[8px] space-y-[6px] bg-[#00000094] rounded-bl-full shadow-current">
-          <h1 className="text-center text-[white] text-[2x1] font-stretch-50% mb-[4px]">Sign Up</h1>
+          <h1 className="text-center text-[white] text-[2x1] font-stretch-50% mb-[4px]">
+            Sign Up
+          </h1>
 
           <form className="space-y-[6px]" onSubmit={handleSignUp}>
             <div>
-              <label htmlFor="email" className="text-start font-stretch-normal text-[white] block">
+              <label
+                htmlFor="email"
+                className="text-start font-stretch-normal text-[white] block"
+              >
                 Email
               </label>
               <input
@@ -49,7 +64,10 @@ const SignUpPage = () => {
             </div>
 
             <div>
-              <label htmlFor="username" className="text-start font-stretch-normal text-[white] block">
+              <label
+                htmlFor="username"
+                className="text-start font-stretch-normal text-[white] block"
+              >
                 User Name
               </label>
               <input
@@ -66,7 +84,10 @@ const SignUpPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="text-start font-stretch-normal text-[white] block">
+              <label
+                htmlFor="password"
+                className="text-start font-stretch-normal text-[white] block"
+              >
                 Password
               </label>
               <input
@@ -86,13 +107,14 @@ const SignUpPage = () => {
               className="w-full py-[2px] bg-[red] text-[white] font-stretch-semi-expanded
                          rounded-full hover:bg-[red]/700 
                          transition duration-200"
+              type="submit"
             >
               Sign Up
             </button>
           </form>
 
           <div className="text-center text-[white]/60">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link to="/login" className="text-[red]/60 hover:underline">
               Log In
             </Link>
