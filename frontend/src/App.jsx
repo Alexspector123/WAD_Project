@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/home/HomePage';
 import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
+import SignUpPage from './pages/SignUpPage'
+import WatchPage from './WatchPage.jsx';
 import Footer from './components/Footer';
 import { useAuthStore } from './store/authUser.js';
 import { Toaster } from 'react-hot-toast'; 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={!user ? <LoginPage />: <Navigator to={"/"}/>} />
         <Route path="/signup" element={!user ? <SignUpPage />: <Navigator to={"/"}/>} />
+        <Route path="/watch/:id" element={user ? <WatchPage />: <Navigator to={"/login"}/>} />
       </Routes>      
       <Footer/>
       <Toaster />
