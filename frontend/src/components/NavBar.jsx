@@ -1,3 +1,4 @@
+// NavBar.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Menu } from 'lucide-react';
@@ -5,53 +6,104 @@ import { useAuthStore } from '../store/authUser.js';
 import { useContentStore } from '../store/content.js';
 
 const NavBar = () => {
-    const [isMobileMenuOpen, setIdMobileMenuOpen] = useState(false);
-    const { user, logout } = useAuthStore();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuthStore();
+  const { setContentType } = useContentStore();
 
-    const toggleMobileMenu = () =>{
-        setIdMobileMenuOpen(!isMobileMenuOpen);
-    };
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
-    const { setContentType } = useContentStore();
+  return (
+    <header className='max-w-6xl mx-auto flex items-center justify-between p-4 h-16 bg-black'>
+      <div className='flex items-center gap-4'>
+        <Link to='/'>
+          <img
+            src='netflix-logo.png'
+            alt='Netflix Logo'
+            className='w-[50px] md:w-[70px]'
+          />
+        </Link>
+        {/* Menu items (Desktop) */}
+        <div className='hidden md:flex items-center gap-4'>
+          <button
+            onClick={() => setContentType('movie')}
+            className='hover:underline'
+          >
+            Movies
+          </button>
+          <button
+            onClick={() => setContentType('tv')}
+            className='hover:underline'
+          >
+            TV Shows
+          </button>
+          <Link to='/history' className='hover:underline'>
+            Search History
+          </Link>
+        </div>
+      </div>
 
-    return (
-        <header className='max-w-[6x1vh] mx-auto flex flex-wrap items-center justify-between p-[4px] h-[20px]'>
-            <div className='flex items-center gap-[10px] z-[50px]'>
-                <Link to={"/"}>
-                    <img src='netflix-logo.png' alt='Netflix Logo' className='w-[50px] size-max:w-[70px]'/>
-                </Link>
-                <div className='hidden size-auto items-center'>
-                    <Link to={"/"} className='hover:underline' onClick={() => setContentType("movie")}>Movies</Link>
-                    <Link to={"/"} className='hover:underline' onClick={() => setContentType("tv")}>TV Shows</Link>
-                    <Link to={"/history"} className='hover:underline'>Search History</Link>
-                </div>
-            </div>
+      <div className='flex gap-4 items-center'>
+        <Link to='/search'>
+          <Search className='w-5 h-5 cursor-pointer' />
+        </Link>
+        {/* Avatar người dùng (nếu có) */}
+        {user?.image ? (
+          <img
+            src={user.image}
+            alt='Avatar'
+            className='h-8 w-8 rounded-full object-cover'
+          />
+        ) : (
+          <div className='h-8 w-8 rounded-full bg-gray-500' />
+        )}
 
-            <div className='flex gap-[2px] items-center z-[50px]'>
-                <Link to={"/search"}>
-                    <Search className="size-[20px] cursor-pointer "/>
-                </Link>
-                <img src={user.image} alt='Avatar' className='h-[8px] rounded cursor-pointer'/>
-                <logout className='size-[20px] cursor-pointer' onClick={logout}/>
+        <button
+          onClick={logout}
+          className='bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700'
+        >
+          Logout
+        </button>
 
-                <div className='size-max:hidden'>
-                    <Menu className='size-[20px] cursor-pointer' onClick={toggleMobileMenu}/>
-                </div>
-            </div>
+        {/* Hamburger menu (Mobile) */}
+        <div className='md:hidden'>
+          <Menu className='w-6 h-6 cursor-pointer' onClick={toggleMobileMenu} />
+        </div>
+      </div>
 
-            {/* Mobile items*/}
-            {isMobileMenuOpen && (
-                <div className='w-full size-max:hidden mt-[4px] z-[50] bg-[black] border rounded border-[gray]/80'>
-                    <Link to={"/"} className='block hover:underline p-[2vh]'
-                    onClick={toggleMobileMenu}>Movies</Link>
-                    <Link to={"/"} className='block hover:underline p-[2vh]'
-                    onClick={toggleMobileMenu}>TV Shows</Link>
-                    <Link to={"/history"} className='block hover:underline p-[2vh]'
-                    onClick={toggleMobileMenu}>Search History</Link>
-                </div>
-            )}
-        </header>
-    );
-}
+      {/* Mobile items */}
+      {isMobileMenuOpen && (
+        <div className='absolute top-16 left-0 w-full bg-black border-t border-gray-700 z-50 md:hidden'>
+          <button
+            onClick={() => {
+              toggleMobileMenu();
+              setContentType('movie');
+            }}
+            className='block w-full text-left px-4 py-2 hover:underline'
+          >
+            Movies
+          </button>
+          <button
+            onClick={() => {
+              toggleMobileMenu();
+              setContentType('tv');
+            }}
+            className='block w-full text-left px-4 py-2 hover:underline'
+          >
+            TV Shows
+          </button>
+          <Link
+            to='/history'
+            className='block w-full text-left px-4 py-2 hover:underline'
+            onClick={toggleMobileMenu}
+          >
+            Search History
+          </Link>
+        </div>
+      )}
+    </header>
+  );
+};
 
-export default NavBar
+export default NavBar;

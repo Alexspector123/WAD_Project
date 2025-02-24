@@ -1,3 +1,4 @@
+// HomePage.jsx
 import React from 'react';
 import AuthScreen from './AuthScreen';
 import HomeScreen from './HomeScreen';
